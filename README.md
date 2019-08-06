@@ -20,7 +20,7 @@ https://developers.google.com/books/docs/v1/reference/volumes/list
 
 
 ## Tasks
-- Setup a node project with react
+- Setup a node project with express
 - Create a get endpoint with an search query and config to limit results (default 5)
 - Create an internal API request to Book API
 - Send the Book API response to my endpoint
