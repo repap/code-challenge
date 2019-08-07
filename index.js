@@ -7,7 +7,6 @@ const app = express()
 
 const {PORT, API_KEY} = process.env
 
-
 // TODO: refactor -> seperate file -> new router && controller
 // TODO: handle axios timeout
 const getGoogleBooks = ({query, limit = 5, page = 0, key}) => 
@@ -35,13 +34,23 @@ app.get('/books', async (req, res) => {
   // TODO: add test query -> is available
   const books = await getGoogleBooks({...req.query, key: API_KEY})
 
+  // TODO: handle status codes
   res.status(200).json({
-    message: '...',
+    message: 'success',
     options: {
       ...req.query
     },
-    books: books.map(mapBooks).sort(sortBooks)
+    data: books.map(mapBooks).sort(sortBooks)
   })
+
+  // example bad request for missing book title query
+  // res.status(400).json({
+  //   message: 'bad request',
+  //   options: {
+  //     ...req.query
+  //   },
+  //   data: {message: 'book title query option is missing'}
+  // })
 })
 
 app.use('*', (req, res) =>
