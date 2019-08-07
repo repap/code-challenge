@@ -1,39 +1,47 @@
 require('dotenv').config()
 
 const express = require('express')
+const axios = require('axios')
+
 const app = express()
 
-const {PORT} = process.env
+const {PORT, API_KEY} = process.env
 
 
 // TODO: refactor -> seperate file -> new router
-const filterAmount = num => (e, i) => num > i ? e : false
+const getGoogleBooks = ({query, limit = 5, page = 0, key}) => 
+  axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${limit}&startIndex=${page}&key=${key}`)
+  .then(res => res.data.items)
+  .catch(console.error)
 
-app.get('/books', (req, res) => {
-  const amount = req.query.amount || 5
-  const q = req.query.q
-  
-  // TODO: add fetch -> get books
-  const data = [1,2,3,4,5,6,7,8]
+const mapBooks = book => ({
+  title: book.volumeInfo.title,
+  authors: book.volumeInfo.authors,
+  information: {
+    publisheDate: book.volumeInfo.publishedDate,
+    pageCount: book.volumeInfo.pageCount,
+    categories: book.volumeInfo.categories,
+  }
+})
 
-  // TODO: add tests for amount -> is number
+const sortBooks = (a,b) => a.title >= b.title ? true : false
 
-  // TODO: add test query -> is set
-  // TODO: add test query -> is evil
+app.get('/books', async (req, res) => {
+  // TODO: add test query -> is available
+  const books = await getGoogleBooks({...req.query, key: API_KEY})
 
   res.status(200).json({
     message: '...',
-    query: {
-      q: q,
-      amount: amount
+    options: {
+      ...req.query
     },
-    data: data.filter(filterAmount(amount))
+    books: books.map(mapBooks).sort(sortBooks)
   })
 })
 
 app.use('*', (req, res) =>
-  res.status(400).json({
-    message: 'query is not available',
+  res.status(404).json({
+    message: 'path is not available',
     data: []
   }))
 
