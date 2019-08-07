@@ -8,9 +8,14 @@ const app = express()
 const {PORT, API_KEY} = process.env
 
 
-// TODO: refactor -> seperate file -> new router
+// TODO: refactor -> seperate file -> new router && controller
+// TODO: handle axios timeout
 const getGoogleBooks = ({query, limit = 5, page = 0, key}) => 
-  axios.get(`https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${limit}&startIndex=${page}&key=${key}`)
+  axios.get(
+    `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${limit}&startIndex=${page}&key=${key}`,
+    {
+      timeout: 60000
+    })
   .then(res => res.data.items)
   .catch(console.error)
 
