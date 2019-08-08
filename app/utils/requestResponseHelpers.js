@@ -5,6 +5,5 @@ const createResponse = (message, data, options) => ({
 })
 
 module.exports = {
-  mapRequestError,
   createResponse
 }
