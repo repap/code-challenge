@@ -9,10 +9,11 @@ const createResponse = (message, data, options) => ({
   data,
 })
 
-router.use((req, res) => {
+router.use((req, res, next) => {
   if (!req.query.query) {
-    res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
+    return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
+  next()
 })
 
 router.get('/', async (req, res) => {
