@@ -12,11 +12,7 @@ const generateGoogleBooksUrl = (query, limit, page, key) =>
 const mapBooks = book => ({
   title: book.volumeInfo.title,
   authors: book.volumeInfo.authors || [],
-  information: {
-    publisheDate: book.volumeInfo.publishedDate || undefined,
-    pageCount: book.volumeInfo.pageCount || undefined,
-    categories: book.volumeInfo.categories || [],
-  }
+  type: 'books'
 })
 
 const fetchGoogleBooks = async ({ query, limit = 5, page = 0 }, key, config = {}) =>
