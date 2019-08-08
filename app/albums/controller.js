@@ -28,7 +28,7 @@ const getAlbums = async (req, res) => {
 
   // fetch data, model response, send response and handle errors
   fetchItunesAlbums({ ...req.query }, { timeout: 60000 })
-    .then(res => res.data.items)
+    .then(res => res.data.results)
     .then(data =>
       data.map(mapAlbums).sort(sortByTitle))
     .then(data =>
