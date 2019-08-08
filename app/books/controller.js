@@ -6,6 +6,9 @@ const { API_KEY } = process.env
 
 const sortByTitle = sortByProperty('title')
 
+const generateGoogleBooksUrl = (query, limit, page, key) =>
+  `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${limit}&startIndex=${page}&key=${key}`
+
 const mapBookTitles = book => ({
   title: book.volumeInfo.title,
   authors: book.volumeInfo.authors || [],
@@ -16,10 +19,8 @@ const mapBookTitles = book => ({
   }
 })
 
-const fetchGoogleBooks = async ({ query, limit = 5, page = 0 }, key) =>
-  await axios.get(
-    `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=${limit}&startIndex=${page}&key=${key}`,
-    { timeout: 60000 })
+const fetchGoogleBooks = async ({ query, limit = 5, page = 0 }, key, config = {}) =>
+  await axios.get( generateGoogleBooksUrl(query, limit, page, key), config )
     .then(res => res.data.items)
     .then(data => data.map(mapBookTitles))
     .then(data => data.sort(sortByTitle))
@@ -30,7 +31,7 @@ const getBooks = async (req, res) => {
     return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
 
-  const data = await fetchGoogleBooks({...req.query}, API_KEY)
+  const data = await fetchGoogleBooks({ ...req.query }, API_KEY, { timeout: 60000 })
 
   if (data.error) {
     return res.status(500)

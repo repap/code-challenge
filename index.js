@@ -9,12 +9,16 @@ const {PORT} = process.env
 
 const app = express()
 
+// register router
 app.use(booksRouter)
 app.use(albumsRouter)
 
+// handle unvalid path
 app.use('*', (req, res) =>
-  res.status(404).json(createResponse('path is not available', [], {...req.query})))
+  res.status(404)
+    .json(createResponse('path is not available', [], {...req.query})))
 
+// init server
 app.listen(
   PORT, 
   err => 

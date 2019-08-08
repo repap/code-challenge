@@ -4,6 +4,9 @@ const { mapRequestError, createResponse } = require('../utils/requestResponseHel
 
 const sortByTitle = sortByProperty('collectionName')
 
+const generateItunesAlbumUrl = (query, limit) =>
+  `https://itunes.apple.com/search?attribute=albumTerm&term=${query}&entity=album&limit=${limit}`
+
 const mapAlbums = album => ({
   title: album.collectionName,
   artists: [album.artistName] || [],
@@ -14,10 +17,8 @@ const mapAlbums = album => ({
   }
 })
 
-const fetchItunesAlbums = async ({ query, limit = 5 }, key) =>
-  await axios.get(
-    `https://itunes.apple.com/search?attribute=albumTerm&term=${query}&entity=album&limit=${limit}`,
-    { timeout: 60000 })
+const fetchItunesAlbums = async ({ query, limit = 5 }, config = {}) =>
+  await axios.get( generateItunesAlbumUrl(query, limit), config )
     .then(res => res.data.results)
     .then(data => data.map(mapAlbums))
     .then(data => data.sort(sortByTitle))
@@ -28,7 +29,7 @@ const getAlbums = async (req, res) => {
     return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
 
-  const data = await fetchItunesAlbums({ ...req.query })
+  const data = await fetchItunesAlbums({ ...req.query }, { timeout: 60000 })
   
   if (data.error) {
     return res.status(500)
