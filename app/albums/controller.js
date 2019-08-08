@@ -1,16 +1,16 @@
 const axios = require('axios')
 const { sortByProperty } = require('../utils/arrayHelpers')
-const { mapRequestError } = require('../utils/requestResponseHelpers')
+const { mapRequestError, createResponse } = require('../utils/requestResponseHelpers')
 
 const sortByTitle = sortByProperty('collectionName')
 
 const mapAlbums = album => ({
   title: album.collectionName,
-  artists: album.artistName,
+  artists: [album.artistName] || [],
   information: {
-    tracks: album.trackCount,
-    release: album.releaseDate,
-    category: album.primaryGenreName
+    tracks: album.trackCount || undefined,
+    release: album.releaseDate || undefined,
+    category: album.primaryGenreName || undefined,
   }
 })
 
@@ -24,11 +24,11 @@ const fetchItunesAlbums = async ({ query, limit = 5 }, key) =>
     .catch(err => mapRequestError(err))
 
 const getAlbums = async (req, res) => {
-  const data = await fetchItunesAlbums({ query, limit })
-
   if (!req.query.query) {
     return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
+
+  const data = await fetchItunesAlbums({ ...req.query })
   
   if (data.error) {
     return res.status(500)

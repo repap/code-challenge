@@ -1,7 +1,6 @@
 const axios = require('axios')
 const { sortByProperty } = require('../utils/arrayHelpers')
-const { mapRequestError } = require('../utils/requestResponseHelpers')
-const { createResponse } = require('./../utils/requestResponseHelpers')
+const { mapRequestError, createResponse } = require('../utils/requestResponseHelpers')
 
 const { API_KEY } = process.env
 
@@ -9,11 +8,11 @@ const sortByTitle = sortByProperty('title')
 
 const mapBookTitles = book => ({
   title: book.volumeInfo.title,
-  authors: book.volumeInfo.authors,
+  authors: book.volumeInfo.authors || [],
   information: {
-    publisheDate: book.volumeInfo.publishedDate,
-    pageCount: book.volumeInfo.pageCount,
-    categories: book.volumeInfo.categories,
+    publisheDate: book.volumeInfo.publishedDate || undefined,
+    pageCount: book.volumeInfo.pageCount || undefined,
+    categories: book.volumeInfo.categories || undefined,
   }
 })
 
@@ -31,7 +30,7 @@ const getBooks = async (req, res) => {
     return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
 
-  const data = await fetchGoogleBooks(req.query, API_KEY)
+  const data = await fetchGoogleBooks({...req.query}, API_KEY)
 
   if (data.error) {
     return res.status(500)
