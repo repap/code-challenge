@@ -15,7 +15,7 @@ const mapBooks = book => ({
   information: {
     publisheDate: book.volumeInfo.publishedDate || undefined,
     pageCount: book.volumeInfo.pageCount || undefined,
-    categories: book.volumeInfo.categories || undefined,
+    categories: book.volumeInfo.categories || [],
   }
 })
 

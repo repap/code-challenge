@@ -13,7 +13,7 @@ const mapAlbums = album => ({
   information: {
     tracks: album.trackCount || undefined,
     release: album.releaseDate || undefined,
-    category: album.primaryGenreName || undefined,
+    categories: [album.primaryGenreName] || [],
   }
 })
 
