@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { sortByProperty } = require('../utils/arrayHelpers')
-const { mapRequestError, createResponse } = require('../utils/requestResponseHelpers')
+const { createResponse } = require('../utils/requestResponseHelpers')
 
 const sortByTitle = sortByProperty('collectionName')
 
