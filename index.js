@@ -2,12 +2,14 @@ require('dotenv').config()
 
 const express = require('express')
 const booksRouter = require('./app/books/router')
+const albumsRouter = require('./app/albums/router')
 
 const app = express()
 
 const {PORT} = process.env
 
 app.use('/books', booksRouter)
+app.use('/albums', albumsRouter)
 
 app.use('*', (req, res) =>
   res.status(404).json({
