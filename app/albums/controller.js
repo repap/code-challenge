@@ -19,25 +19,24 @@ const mapAlbums = album => ({
 
 const fetchItunesAlbums = async ({ query, limit = 5 }, config = {}) =>
   await axios.get( generateItunesAlbumUrl(query, limit), config )
-    .then(res => res.data.results)
-    .then(data => data.map(mapAlbums))
-    .then(data => data.sort(sortByTitle))
-    .catch(err => mapRequestError(err))
 
 const getAlbums = async (req, res) => {
+  // check if query is set and response if it's missing
   if (!req.query.query) {
     return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
   }
 
-  const data = await fetchItunesAlbums({ ...req.query }, { timeout: 60000 })
-  
-  if (data.error) {
-    return res.status(500)
-      .json(createResponse(data.error.message, { ...data.error.data }, { ...req.query }))
-  }
-
-  res.status(200)
-    .json(createResponse('success', data, req.query))
+  // fetch data, model response, send response and handle errors
+  fetchItunesAlbums({ ...req.query }, { timeout: 60000 })
+    .then(res => res.data.items)
+    .then(data =>
+      data.map(mapAlbums).sort(sortByTitle))
+    .then(data =>
+      res.status(200)
+        .json(createResponse('success', data, req.query)))
+    .catch(err =>
+      res.status(500)
+        .json(createResponse(err.message, { name: err.name, code: err.code }, { ...req.query })))  
 }
 
 module.exports = {
