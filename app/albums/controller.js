@@ -1,6 +1,6 @@
 const axios = require('axios')
-
-const sortByProperty = prop => (a, b) => a[prop] >= b[prop] ? true : false
+const { sortByProperty } = require('../utils/arrayHelpers')
+const { mapRequestError } = require('../utils/requestResponseHelpers')
 
 const sortByTitle = sortByProperty('collectionName')
 
@@ -14,16 +14,6 @@ const mapAlbums = album => ({
   }
 })
 
-const mapRequestError = err => ({
-  error: {
-    message: err.message,
-    data: {
-      name: err.name,
-      code: err.code,
-    }
-  }
-})
-
 const fetchItunesAlbums = async ({ query, limit = 5 }, key) =>
   await axios.get(
     `https://itunes.apple.com/search?attribute=albumTerm&term=${query}&entity=album&limit=${limit}`,
@@ -33,7 +23,21 @@ const fetchItunesAlbums = async ({ query, limit = 5 }, key) =>
     .then(data => data.sort(sortByTitle))
     .catch(err => mapRequestError(err))
 
-const getAlbums = async ({ query, limit = 5 }) => await fetchItunesAlbums({ query, limit })
+const getAlbums = async (req, res) => {
+  const data = await fetchItunesAlbums({ query, limit })
+
+  if (!req.query.query) {
+    return res.status(403).json(createResponse('error - query is missing', [], { ...req.query }))
+  }
+  
+  if (data.error) {
+    return res.status(500)
+      .json(createResponse(data.error.message, { ...data.error.data }, { ...req.query }))
+  }
+
+  res.status(200)
+    .json(createResponse('success', data, req.query))
+}
 
 module.exports = {
   getAlbums,

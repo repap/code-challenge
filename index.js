@@ -3,21 +3,17 @@ require('dotenv').config()
 const express = require('express')
 const booksRouter = require('./app/books/router')
 const albumsRouter = require('./app/albums/router')
-
-const app = express()
+const { createResponse } = require('./app/utils/requestResponseHelpers')
 
 const {PORT} = process.env
 
-app.use('/books', booksRouter)
-app.use('/albums', albumsRouter)
+const app = express()
+
+app.use(booksRouter)
+app.use(albumsRouter)
 
 app.use('*', (req, res) =>
-  res.status(404).json({
-    message: 'path is not available',
-    options: {...req.query},
-    data: []
-  }))
-
+  res.status(404).json(createResponse('path is not available', [], {...req.query})))
 
 app.listen(
   PORT, 
