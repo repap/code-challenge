@@ -1,21 +1,22 @@
 # Project Setup & Startup
 The service is an application based on Node.js including the express framework. 
-To run the application Node.js and npm are required.
+To run the application Node.js (v10.12.0) and npm (v6.4.1) are required.
 
 Before you can start the application localy it is mandatory to setup an .env file.
 Please use the following example as an guide line to create a working .env file.
 
 Example .env file
 ```
+# defines the timeout for the external api requests
+TIMEOUT=60000
+# defines the amount of maximum books & albums
+LIMIT=5
+# defines the port for the server
 PORT=4000
-API_KEY=[secret key]
 ```
 
-The `API_KEY` is necessary for the google books api. 
-
-
 It is possible to run the application in an production or development mode.
-The difference between both is, that the development mode uses nodemon to restart the application on any file changes.
+The difference between both are, that the development mode uses nodemon to restart the application on any file changes.
 
 ```
 #dev
@@ -35,7 +36,7 @@ I choosed Node.js as my development environment because I have some experince wi
 To build the REST API I choosed express. I know, that there are other frameworks which might be much more suited for this challenge but I never worked with those.
 
 ## Application Structure
-Each end point makes got its own directory containing a router and a controller.
+Each end point makes its own directory containing a router and a controller.
 
 The router takes care about the url and the used controller.
 
@@ -68,23 +69,27 @@ index.js
 - ✔️ Send the Book API & Album API response to my endpoint
 - ✔️ Map and sort the response
 - ✔️ Cancele the Book or Albums request after 1 minute latest
-- ❌ expose Book and Album API response metrics
+- ️️️️️️️️✔️ expose Book and Album API response metrics
 
-### Questions
+### annotations
 - 🔥 I'm not sure about the health check and metrics
   - I assume this is related to microservice & container infrastructure
   - skipped for now due to lack of experience -> focus on stuff I know
+- 🔥 I didn't implement tests yet.
+  - currently tests aren't part of my workflow and I wasn't sure if I was able to solve the challenge in a reasonable time
+  - skipped for now due to lack of experience -> focus on stuff I know
 
 ## Response Objects Structure
-### Books
-- title: String
-- authors: Array
-- type: String
-
-### Albums
-- title: String
-- artists: Array
-- type: String
+- status
+- statusText
+- responses
+  - type
+  - status
+  - statusText
+- data
+  - title
+  - author/artist
+  - type
 
 ## Journal
 I started by evaluating the challenge and created a first Integration Plan, similar to the plan above.
@@ -109,8 +114,11 @@ In my first integration the router was responsible to veryfy the request and res
 | adding album endpoint                 | 1h          | 
 | additional improvements & refactoring | 1h          |
 | documentation                         | 1.5h        |
-| implementing response metrics         | X           |
-| **Total**                             | **7h**      |
+| refactoring with additional knowledge | 1h          |
+| implementing response metrics         | 1h          |
+| additional refactoring                | 2h          |
+| reimplementing due to lost data       | 1.5h        |
+| **Total**                             | **12.5h**   |
 
 
 
@@ -118,7 +126,7 @@ In my first integration the router was responsible to veryfy the request and res
 ## Requirements
 - get books or albums with a search query
 - use the given Google and iTunes apis to receive the data
-- return 5 entries by default
+- return 5 books and 5 albums by default
 - response is sorted by title alphabetical
 - response contains metrics of the external service requests
 
