@@ -10,7 +10,7 @@ const generateItunesAlbumUrl = (query, limit) =>
 const mapAlbums = album => ({
   title: album.collectionName,
   artists: [album.artistName] || [],
-  type: 'albums'
+  type: 'album'
 })
 
 const fetchItunesAlbums = async ({ query, limit = 5 }, config = {}) =>
