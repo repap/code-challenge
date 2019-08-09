@@ -1,21 +1,22 @@
 # Project Setup & Startup
 The service is an application based on Node.js including the express framework. 
-To run the application Node.js and npm are required.
+To run the application Node.js (v10.12.0) and npm (v6.4.1) are required.
 
 Before you can start the application localy it is mandatory to setup an .env file.
 Please use the following example as an guide line to create a working .env file.
 
 Example .env file
 ```
+# defines the timeout for the external api requests
+TIMEOUT=60000
+# defines the amount of maximum books & albums
+LIMIT=5
+# defines the port for the server
 PORT=4000
-API_KEY=[secret key]
 ```
 
-The `API_KEY` is necessary for the google books api. 
-
-
 It is possible to run the application in an production or development mode.
-The difference between both is, that the development mode uses nodemon to restart the application on any file changes.
+The difference between both are, that the development mode uses nodemon to restart the application on any file changes.
 
 ```
 #dev
@@ -35,7 +36,7 @@ I choosed Node.js as my development environment because I have some experince wi
 To build the REST API I choosed express. I know, that there are other frameworks which might be much more suited for this challenge but I never worked with those.
 
 ## Application Structure
-Each end point makes got its own directory containing a router and a controller.
+Each end point makes its own directory containing a router and a controller.
 
 The router takes care about the url and the used controller.
 
