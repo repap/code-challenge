@@ -69,23 +69,27 @@ index.js
 - ✔️ Send the Book API & Album API response to my endpoint
 - ✔️ Map and sort the response
 - ✔️ Cancele the Book or Albums request after 1 minute latest
-- ❌ expose Book and Album API response metrics
+- ️️️️️️️️✔️ expose Book and Album API response metrics
 
-### Questions
+### annotations
 - 🔥 I'm not sure about the health check and metrics
   - I assume this is related to microservice & container infrastructure
   - skipped for now due to lack of experience -> focus on stuff I know
+- 🔥 I didn't implement tests yet.
+  - currently tests aren't part of my workflow and I wasn't sure if I was able to solve the challenge in a reasonable time
+  - skipped for now due to lack of experience -> focus on stuff I know
 
 ## Response Objects Structure
-### Books
-- title: String
-- authors: Array
-- type: String
-
-### Albums
-- title: String
-- artists: Array
-- type: String
+- status
+- statusText
+- responses
+  - type
+  - status
+  - statusText
+- data
+  - title
+  - author/artist
+  - type
 
 ## Journal
 I started by evaluating the challenge and created a first Integration Plan, similar to the plan above.
@@ -110,8 +114,11 @@ In my first integration the router was responsible to veryfy the request and res
 | adding album endpoint                 | 1h          | 
 | additional improvements & refactoring | 1h          |
 | documentation                         | 1.5h        |
-| implementing response metrics         | X           |
-| **Total**                             | **7h**      |
+| refactoring with additional knowledge | 1h          |
+| implementing response metrics         | 1h          |
+| additional refactoring                | 2h          |
+| reimplementing due to lost data       | 1.5h        |
+| **Total**                             | **12.5h**   |
 
 
 
@@ -119,7 +126,7 @@ In my first integration the router was responsible to veryfy the request and res
 ## Requirements
 - get books or albums with a search query
 - use the given Google and iTunes apis to receive the data
-- return 5 entries by default
+- return 5 books and 5 albums by default
 - response is sorted by title alphabetical
 - response contains metrics of the external service requests
 
