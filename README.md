@@ -28,6 +28,14 @@ npm run dev
 npm start
 ```
 
+If the application was started with an .env file as shown above the service endpoint can be used with the following URL. 
+
+```
+http://localhost:4000/?query=beispiel
+```
+
+Beside the mandatory **query** parameter, which is used to search for the books and albums, a **limit** parameter can also be added to overwrite the default result limit.
+
 
 # Environment, Project Description
 `Node.js, express, axios, nodemon`
@@ -67,17 +75,6 @@ I dind't accomplished the whole challenge. The application don't contain the req
   - currently tests aren't part of my workflow and I wasn't sure if I was able to solve the challenge in a reasonable time
   - skipped for now due to lack of experience -> focus on stuff I know
 
-## Response Objects Structure
-- status
-- statusText
-- responses
-  - type
-  - status
-  - statusText
-- data
-  - title
-  - author/artist
-  - type
 
 ## Journal
 I started by evaluating the challenge and created a first Integration Plan, similar to the plan above.
