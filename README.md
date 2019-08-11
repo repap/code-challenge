@@ -9,20 +9,21 @@ Example .env file
 ```
 # defines the timeout for the external api requests
 TIMEOUT=60000
+
 # defines the amount of maximum books & albums
 LIMIT=5
+
 # defines the port for the server
 PORT=4000
 ```
 
 It is possible to run the application in an production or development mode.
-The difference between both are, that the development mode uses nodemon to restart the application on any file changes.
+The difference between both are, that the development mode uses nodemon to restart the application on any code changes.
 
 ```
 #dev
 npm run dev
-```
-```
+
 #prod
 npm start
 ```
@@ -31,34 +32,21 @@ npm start
 # Environment, Project Description
 `Node.js, express, axios, nodemon`
 
-I choosed Node.js as my development environment because I have some experince with it and feel quiet comfortable with Javascript as my programming language.
+I choosed Node.js as my development environment because I have some experince with it and feel quiet comfortable with Javascript.
 
 To build the REST API I choosed express. I know, that there are other frameworks which might be much more suited for this challenge but I never worked with those.
 
-## Application Structure
-Each end point makes its own directory containing a router and a controller.
+For the request of the google books and iTunes albums api I used axios. Axios abstracts the requests and allowed me to use Promises for asynchronius functions.
 
-The router takes care about the url and the used controller.
+The **index.js** is used to setup the server and initializes the the route to get the books and albums.
 
-The controller receives the request and response object provided by the router.
-It takes care about the response its status and the requests to the upstream service.
-The controller also models the data as required.
+The **booksAndAlbums.js** handles all request and checks if mandatory parameters are available. The file requires additional files to model the application.
 
-For commonly used functions the utils directory contains array and request/response helper.
+The **helper files** contain all functions which are used to build the application. 
 
-```
-index.js
-|- app
-  |- albums
-    |- controller.js
-    |- router.js
-  |- books
-    |- controller.js
-    |- router.js
-  |- utils
-    |- arrayHelper.js
-    |- requestResponseHelper.js
-```
+I did this to be able to compose the application in one file and create all neccessary functions in others. This shall help to understand the application and data flow without being distracted by all implementation details.
+
+I dind't accomplished the whole challenge. The application don't contain the required health check and metrics. My assumption was that this requirement refers to a microservice / container application environment. But I didn't want to implement anything I'm not sure about.
 
 
 # Integration Plan, Project Journal & Effort
@@ -96,29 +84,17 @@ I started by evaluating the challenge and created a first Integration Plan, simi
 
 My first integration started as a simple prototype. I did this to make sure, that my intial integration plan works due to my lack of experience. My intention was to avoid extra effort by following a false assumption and invest unecessary work. 
 
-First, Iimplemented the books route and added the request to the google books api. As soon as I was able to request the books with an API Key I finalized the request and modeled the response as required.
-
-As soon as I proofed my integration idea I refactored the application to its current structure and added the album endpoint baed on my gained experience.
-
-After all endpoints were available I reviewed my implementation and improved it by refactoring further.
-Besides minor changes I also changed the way the router and the controller interacts with each other. 
-
-In my first integration the router was responsible to veryfy the request and response. I changed this by handing over the request and response objects to the controller. Now the controller takes care of the application logic and the router is used to define the configuration for the endpoint.
+After my implementation plan was working I added additional features like the response metrics and refactored parts of the application to keep it readable and maintainable.
 
 ## Effort
 | Task                                  | time spent  |
 | :---                                  |         ---:|
 | Preperation & Setup                   | 0.5h        |
 | Prototype / First implementation      | 1.5h        |
-| refactoring project structure         | 1.5h        |
-| adding album endpoint                 | 1h          | 
-| additional improvements & refactoring | 1h          |
-| documentation                         | 1.5h        |
-| refactoring with additional knowledge | 1h          |
+| refactoring project structure         | 2h          |
 | implementing response metrics         | 1h          |
-| additional refactoring                | 2h          |
-| reimplementing due to lost data       | 1.5h        |
-| **Total**                             | **12.5h**   |
+| documentation                         | 1.5h        |
+| **Total**                             | **6.5h**   |
 
 
 
